@@ -1,10 +1,10 @@
-name: React Build
+name: Next.js Static Export
 
 on:
   push:
     branches:
-      - master # change if your branch name is different
-  workflow_dispatch: # allows manual trigger
+      - master   # or main if your repo uses 'main'
+  workflow_dispatch: # allow manual trigger
 
 jobs:
   build:
@@ -17,17 +17,22 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'  # match your local Node version
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build project
-        run: npm run build
+      - name: Build and export static site
+        run: |
+          npm run build
+          npm run export
 
-      - name: Upload build folder as artifact
+      - name: List files after export
+        run: ls -R
+
+      - name: Upload static site as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: react-build
-          path: build
+          name: site-export
+          path: out
 
